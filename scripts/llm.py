@@ -1,37 +1,19 @@
-# from langchain_ollama import OllamaLLM
-# from langchain_openai import OpenAI
 from langchain.prompts import PromptTemplate
-
-# model = OllamaLLM(model="deepseek-r1", temperature=0.2, num_predict=4096)
-# modelOpenAI = OpenAI(api_key="", model="")
-
 from langchain_google_genai import ChatGoogleGenerativeAI
 import os
 from dotenv import load_dotenv
 
-_ = load_dotenv()
+load_dotenv()
 
 
-llm = ChatGoogleGenerativeAI(
-    api_key=os.getenv("gemini_api_key_2"), # type: ignore
-    model="gemini-1.5-pro",
+llm_model = ChatGoogleGenerativeAI(
+    api_key=os.getenv("gemini_api_key_2"),
+    model="gemma-3-27b-it",
     temperature=0.7,
     max_tokens=None,
     timeout=None,
     max_retries=2,
 )
-
-# messages = [
-#     (
-#         "system",
-#         "You are a helpful assistant that translates English to French. Translate the user sentence.",
-#     ),
-#     ("human", "I love programming."),
-# ]
-# ai_msg = llm.invoke(messages)
-# print(ai_msg.content)
-
-
 
 
 test_case_prompt = PromptTemplate(
@@ -114,53 +96,5 @@ You are an AI test case generator. Your job is to analyze JIRA user stories and 
 
 
 Now generate the response.
-"""
+""",
 )
-
-
-user_story = "As an admin, I should be able to manage the assessments"
-jira_id = "RD-409"
-acceptance_criteria = """
-1.The side panel should have an Assessment Hub section with Assessments and Question Bank tabs.
-2.Assessments should be displayed as cards with title, type, tags, last modified details, and status indicators (Blue: Assigned, Gray: Unassigned).
-3.A filter option should allow filtering by type (Self, Peer) and status (assigned, unassigned) with a count badge and an empty state message if no results match.
-4.A search bar should enable searching by assessment title, updating the assessment count dynamically.
-5.A three-dot menu should provide options to Duplicate (creates a copy) and Delete (only unassigned assessments, with confirmation).
-"""
-
-
-formatted_prompt = test_case_prompt.format(
-    user_story=user_story,
-    jira_id=jira_id,
-    acceptance_criteria=acceptance_criteria
-)
-
-def find_next_id():
-  files = os.listdir("outputs")
-  max_id = -1
-  for x in files:
-    max_id = max(max_id,(int(x.split("output")[1].split(".")[0])))
-  return max_id + 1
-
-try:
-  file_name = find_next_id()
-except:
-  file_name = 1
-with open(f"outputs/{jira_id}_output{str(file_name)}.md", "w") as file:
-    response = llm.invoke(formatted_prompt)  
-    file.write("\n User Prompt :" + "  " + test_case_prompt.template + "\n")
-    file.write("-------------------")
-    file.write("------------------------- LLM output -------------------------------------------------- \n\n ")
-    file.write(response.content + "\n") # type: ignore
-    file.write("Tokens Outputed: " + str(len(response.content.split(" "))) + "\n") # type: ignore
-    file.write("\n")
-    file.write("End of Iteration" + "\n")
-    file.write("---------------------------------------------------------------------------")
-    file.write("\n")
-  
-
-    
-    
-    
-
-    
