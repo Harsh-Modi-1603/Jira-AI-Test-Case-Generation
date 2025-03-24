@@ -9,7 +9,7 @@ load_dotenv()
 email = os.getenv("JIRA_EMAIL")
 token = os.getenv("JIRA_TOKEN")
 
-jira = JIRA(server="https://inappad.atlassian.net/", basic_auth=(email, token))
+jira = JIRA(server="https://inappad.atlassian.net/", basic_auth=(email, token)) # type: ignore
 issue = jira.issue("RD-294")
 
 # with open("jira-output.json","w") as file:
