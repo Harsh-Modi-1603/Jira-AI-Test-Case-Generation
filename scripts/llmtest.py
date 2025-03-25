@@ -9,7 +9,7 @@ _ = load_dotenv()
 
 # Initialize the Google Generative AI model
 llm = ChatGoogleGenerativeAI(
-    api_key=os.getenv("gemini_api_key_2"),
+    api_key=os.getenv("gemini_api_key_2"), # type: ignore
     model="gemini-1.5-pro",
     temperature=0.3,
     max_tokens=4096,
@@ -70,7 +70,7 @@ def generate_test_cases(user_story, jira_id, acceptance_criteria, total_scenario
             # Save to file
             with open("output.md", "a") as file:
                 file.write(f"\n### Batch {batch_number} Generated Test Cases:\n")
-                file.write(test_case_content)
+                file.write(test_case_content) # type: ignore
                 file.write("\n\n")
 
             print(f"Batch {batch_number} generated successfully.")
