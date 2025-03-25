@@ -3,3 +3,4 @@
 outputs
 prev_outputs
 testcase-generator
+__pycache__
